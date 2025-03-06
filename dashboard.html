@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - Pointage</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-8 pb-20">
+        <header class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-indigo-700">Tableau de Bord</h1>
+                <p class="text-gray-600 mt-2">Vue d'ensemble du système de pointage</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="location.html" class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600">
+                    <i class="fas fa-map-marker-alt mr-2"></i> Carte
+                </a>
+                <a href="history.html" class="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600">
+                    <i class="fas fa-history mr-2"></i> Historique
+                </a>
+                <a href="index.html" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                    <i class="fas fa-arrow-left mr-2"></i> Retour
+                </a>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Present Employees Card -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-500 mr-4">
+                        <i class="fas fa-user-check text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Employés Présents</p>
+                        <h3 class="text-2xl font-bold">{{ presentCount }}</h3>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" :style="`width: ${presentPercentage}%`"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">{{ presentPercentage }}% des employés sont présents</p>
+                </div>
+            </div>
+            
+            <!-- Absent Employees Card -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-red-100 text-red-500 mr-4">
+                        <i class="fas fa-user-times text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Employés Absents</p>
+                        <h3 class="text-2xl font-bold">{{ absentCount }}</h3>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" :style="`width: ${100 - presentPercentage}%`"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">{{ 100 - presentPercentage }}% des employés sont absents</p>
+                </div>
+            </div>
+            
+            <!-- Average Worktime Card -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-indigo-100 text-indigo-500 mr-4">
+                        <i class="fas fa-clock text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Durée Moyenne</p>
+                        <h3 class="text-2xl font-bold">{{ averageWorktime }}</h3>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500">Moyenne des journées de travail</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Weekly Attendance Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Présence Hebdomadaire</h3>
+                <canvas id="weeklyChart" height="200"></canvas>
+            </div>
+
+            <!-- Hours per Employee Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Heures par Employé</h3>
+                <canvas id="employeeHoursChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-gray-50 border-b">
+                <h2 class="text-lg font-semibold text-gray-800">Derniers Pointages</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employé</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Heure</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="record in recentActivity" :key="record.id" class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
+                                        <img v-if="record.photo" :src="record.photo" alt="" class="h-full w-full object-cover">
+                                        <div v-else class="h-full w-full bg-gray-300 flex items-center justify-center">
+                                            <span class="text-xs">{{ getInitials(record.name) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">{{ record.name }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${record.type === 'in' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`">
+                                    {{ record.type === 'in' ? 'Arrivée' : 'Départ' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ record.time }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ record.date }}</td>
+                        </tr>
+                        <tr v-if="recentActivity.length === 0">
+                            <td colspan="4" class="px-6 py-12 text-center text-gray-500">
+                                Aucune activité récente
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <a href="index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="dashboard.html" class="nav-item active">
+                <i class="fas fa-chart-pie"></i>
+                <span>Tableau de Bord</span>
+            </a>
+            <a href="history.html" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Historique</span>
+            </a>
+            <a href="location.html" class="nav-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Carte</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

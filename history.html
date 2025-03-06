@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique de Pointage</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-8 pb-20">
+        <header class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-indigo-700">Historique de Pointage</h1>
+                <p class="text-gray-600 mt-2">Registre des entrées et sorties des employés</p>
+            </div>
+            <div class="nav-bar">
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Tableau de Bord</span>
+                </a>
+                <a href="history.html" class="nav-item active">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </a>
+                <a href="location.html" class="nav-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Carte</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="mb-6 bg-white p-4 rounded-lg shadow-md">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-800">Filtrer par employé</h2>
+                <button @click="selectedEmployeeId = null" 
+                    class="text-indigo-600 hover:text-indigo-800 text-sm"
+                    :class="{ 'font-bold': !selectedEmployeeId }">
+                    Voir tous
+                </button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mt-4">
+                <div v-for="employee in employees" :key="employee.id" 
+                    class="cursor-pointer text-center"
+                    @click="selectEmployee(employee.id)">
+                    <div class="relative rounded-full h-12 w-12 mx-auto mb-2 overflow-hidden"
+                        :class="{'ring-2 ring-indigo-600': selectedEmployeeId === employee.id}">
+                        <img v-if="employee.photo" :src="employee.photo" :alt="employee.name" class="h-full w-full object-cover">
+                        <div v-else class="h-full w-full bg-gray-300 flex items-center justify-center">
+                            <span class="text-sm">{{ getInitials(employee.name) }}</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-700 truncate">{{ employee.name }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-gray-800">
+                    {{ selectedEmployeeId ? getEmployeeName(selectedEmployeeId) + ' - Historique' : 'Historique complet' }}
+                </h2>
+                <div class="flex space-x-2">
+                    <select v-model="filterMonth" class="border rounded px-2 py-1 text-sm">
+                        <option value="all">Tous les mois</option>
+                        <option value="1">Janvier</option>
+                        <option value="2">Février</option>
+                        <option value="3">Mars</option>
+                        <option value="4">Avril</option>
+                        <option value="5">Mai</option>
+                        <option value="6">Juin</option>
+                        <option value="7">Juillet</option>
+                        <option value="8">Août</option>
+                        <option value="9">Septembre</option>
+                        <option value="10">Octobre</option>
+                        <option value="11">Novembre</option>
+                        <option value="12">Décembre</option>
+                    </select>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th v-if="!selectedEmployeeId" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employé</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Arrivée</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Départ</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durée</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-if="filteredHistory.length === 0">
+                            <td :colspan="selectedEmployeeId ? 4 : 5" class="px-6 py-12 text-center text-gray-500">
+                                Aucun historique disponible pour cette période
+                            </td>
+                        </tr>
+                        <tr v-for="record in filteredHistory" :key="record.id" class="hover:bg-gray-50">
+                            <td v-if="!selectedEmployeeId" class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
+                                        <img v-if="getEmployeePhoto(record.employeeId)" :src="getEmployeePhoto(record.employeeId)" alt="" class="h-full w-full object-cover">
+                                        <div v-else class="h-full w-full bg-gray-300 flex items-center justify-center">
+                                            <span class="text-xs">{{ getInitials(getEmployeeName(record.employeeId)) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">{{ getEmployeeName(record.employeeId) }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ record.date }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatTime(record.checkIn) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ record.checkOut ? formatTime(record.checkOut) : '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ calculateDuration(record.checkIn, record.checkOut) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="history.js"></script>
+</body>
+</html>

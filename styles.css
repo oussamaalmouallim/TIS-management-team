@@ -1,0 +1,231 @@
+.employee-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.employee-card:hover {
+    transform: translateY(-5px);
+}
+
+.employee-card.present {
+    border-left: 4px solid #10B981;
+}
+
+.status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    max-width: 350px;
+    z-index: 50;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.employee-photo {
+    position: relative;
+    overflow: hidden;
+}
+
+.employee-photo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(79, 70, 229, 0);
+    transition: background 0.3s ease;
+}
+
+.employee-card:hover .employee-photo::before {
+    background: rgba(79, 70, 229, 0.1);
+}
+
+.employee-card.present .employee-photo::before {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.history-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.history-content {
+    background-color: white;
+    border-radius: 8px;
+    max-width: 90%;
+    width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.history-header {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 10;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.history-row:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+.employee-card .view-history {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.employee-card:hover .view-history {
+    opacity: 1;
+}
+
+.employee-marker-container {
+    background: transparent;
+}
+
+.employee-marker {
+    position: relative;
+    text-align: center;
+}
+
+.employee-marker-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #4f46e5;
+    background-color: white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.employee-marker-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.employee-marker-initials {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    font-weight: bold;
+    color: #4b5563;
+}
+
+.employee-marker-name {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* History page specific styles */
+.employee-filter-badge {
+    transition: all 0.2s ease;
+}
+
+.employee-filter-badge.selected {
+    transform: scale(1.1);
+}
+
+/* Navigation Bar Styles */
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 40;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+    color: #4f46e5;
+}
+
+.nav-item i {
+    font-size: 1.25rem;
+    margin-bottom: 5px;
+}
+
+@media (min-width: 768px) {
+    .nav-bar {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        border-radius: 10px;
+        justify-content: center;
+        gap: 2rem;
+    }
+    
+    .nav-item {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .history-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+}

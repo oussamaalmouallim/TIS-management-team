@@ -6,75 +6,111 @@ document.addEventListener('DOMContentLoaded', () => {
             const employees = ref([
                 { 
                     id: 1, 
-                    name: 'Thomas Dubois', 
-                    position: 'Développeur', 
+                    name: 'Oussama', 
+                    position: 'Ingénieur', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/men/32.jpg' 
+                    photo: 'images/oussama.jpg' 
                 },
                 { 
                     id: 2, 
-                    name: 'Marie Laurent', 
-                    position: 'Designer UX', 
+                    name: 'Reda', 
+                    position: 'Chargé mission', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/women/44.jpg' 
+                    photo: 'images/OIP.jpg' 
                 },
                 { 
                     id: 3, 
-                    name: 'Jean Petit', 
-                    position: 'Chef de projet', 
+                    name: 'Amina', 
+                    position: 'Assistante', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/men/62.jpg' 
+                    photo: 'images/OIP.jpg' 
                 },
                 { 
                     id: 4, 
-                    name: 'Sophie Martin', 
-                    position: 'Marketing', 
+                    name: 'Nouhaila', 
+                    position: 'Assistante', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/women/58.jpg' 
+                    photo: 'images/OIP.jpg' 
                 },
                 { 
                     id: 5, 
-                    name: 'Lucas Bernard', 
-                    position: 'Développeur Front-end', 
+                    name: 'Aya', 
+                    position: 'Inventaire', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/men/76.jpg' 
+                    photo: 'images/OIP.jpg' 
                 },
                 { 
                     id: 6, 
-                    name: 'Emma Moreau', 
-                    position: 'Comptable', 
+                    name: 'Aymane', 
+                    position: 'Technicien', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/women/33.jpg' 
+                    photo: 'images/OIP.jpg' 
                 },
                 { 
                     id: 7, 
-                    name: 'Antoine Richard', 
-                    position: 'Commercial', 
+                    name: 'Driss', 
+                    position: 'Technicien', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/men/41.jpg' 
+                    photo: 'images/OIP.jpg' 
                 },
                 { 
                     id: 8, 
-                    name: 'Julie Leroy', 
-                    position: 'Ressources Humaines', 
+                    name: 'Abdlekrim', 
+                    position: 'Technicien', 
                     isPresent: false, 
                     checkInTime: null, 
                     checkOutTime: null,
-                    photo: 'https://randomuser.me/api/portraits/women/17.jpg' 
+                    photo: 'images/OIP.jpg' 
+                },
+                { 
+                    id: 9, 
+                    name: 'Brahim', 
+                    position: 'Technicien', 
+                    isPresent: false, 
+                    checkInTime: null, 
+                    checkOutTime: null,
+                    photo: 'images/OIP.jpg' 
+                },
+                { 
+                    id: 10, 
+                    name: 'Youssef', 
+                    position: 'Technicien', 
+                    isPresent: false, 
+                    checkInTime: null, 
+                    checkOutTime: null,
+                    photo: 'images/OIP.jpg' 
+                },
+                { 
+                    id: 11, 
+                    name: 'Achraf', 
+                    position: 'Technicien', 
+                    isPresent: false, 
+                    checkInTime: null, 
+                    checkOutTime: null,
+                    photo: 'images/OIP.jpg' 
+                },
+                { 
+                    id: 12, 
+                    name: 'Mousstafa', 
+                    position: 'Technicien', 
+                    isPresent: false, 
+                    checkInTime: null, 
+                    checkOutTime: null,
+                    photo: 'images/OIP.jpg' 
                 },
             ]);
 

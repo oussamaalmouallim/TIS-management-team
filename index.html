@@ -46,6 +46,9 @@
                     :class="['px-4 py-2 rounded-lg', filter === 'absent' ? 'bg-red-600 text-white' : 'bg-white text-gray-700']">
                     Absents
                 </button>
+                <button @click="showAddEmployeeModal = true" class="px-4 py-2 rounded-lg bg-indigo-600 text-white">
+                    <i class="fas fa-plus mr-2"></i>Ajouter
+                </button>
             </div>
         </div>
 
@@ -78,9 +81,11 @@
                             Non pointé
                         </p>
                     </div>
-                    <button @click="viewHistory(employee, $event)" class="view-history text-indigo-600 text-sm hover:text-indigo-800">
-                        <i class="fas fa-history mr-1"></i> Historique
-                    </button>
+                    <div class="flex justify-between mt-2">
+                        <button @click="editEmployee(employee, $event)" class="view-history text-indigo-600 text-sm hover:text-indigo-800">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,6 +148,105 @@
                             <div>{{ record.checkOut ? formatTime(record.checkOut) : '-' }}</div>
                             <div>{{ calculateDuration(record.checkIn, record.checkOut) }}</div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Photo Modal -->
+        <div v-if="showPhotoModal" class="history-modal" @click="closePhotoModal">
+            <div class="history-content" @click.stop>
+                <div class="history-header p-4 border-b">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-gray-800" v-if="selectedEmployee">
+                            Changer la photo de {{ selectedEmployee.name }}
+                        </h2>
+                        <button @click="closePhotoModal" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="w-32 h-32 overflow-hidden rounded-full border-4 border-indigo-200">
+                            <img v-if="previewImage || (selectedEmployee && selectedEmployee.photo)" 
+                                :src="previewImage || selectedEmployee.photo" 
+                                class="w-full h-full object-cover">
+                            <div v-else class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                <i class="fas fa-user text-4xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="photo-upload">
+                            Sélectionner une nouvelle photo
+                        </label>
+                        <input @change="handleImageUpload" class="hidden" type="file" accept="image/*" id="photo-upload">
+                        <label for="photo-upload" class="cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded block text-center">
+                            <i class="fas fa-upload mr-2"></i> Importer une image
+                        </label>
+                    </div>
+                    <div class="flex justify-end space-x-2 mt-6">
+                        <button @click="closePhotoModal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                            Annuler
+                        </button>
+                        <button @click="saveNewPhoto" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                            Enregistrer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add New Employee Modal -->
+        <div v-if="showAddEmployeeModal" class="history-modal" @click="closeAddEmployeeModal">
+            <div class="history-content" @click.stop>
+                <div class="history-header p-4 border-b">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-gray-800">
+                            {{ editMode ? 'Modifier l\'employé' : 'Ajouter un nouvel employé' }}
+                        </h2>
+                        <button @click="closeAddEmployeeModal" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="employee-name">
+                            Nom complet
+                        </label>
+                        <input v-model="newEmployee.name" id="employee-name" type="text" 
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="employee-position">
+                            Poste / Titre
+                        </label>
+                        <input v-model="newEmployee.position" id="employee-position" type="text" 
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="employee-photo">
+                            Photo (optionnelle)
+                        </label>
+                        <input @change="handleNewEmployeePhoto" class="hidden" type="file" accept="image/*" id="employee-photo">
+                        <label for="employee-photo" class="cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded block text-center">
+                            <i class="fas fa-upload mr-2"></i> Importer une image
+                        </label>
+                        <div v-if="newEmployee.photo" class="mt-3 flex items-center justify-center">
+                            <div class="w-20 h-20 overflow-hidden rounded-full border-2 border-indigo-200">
+                                <img :src="newEmployee.photo" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-2 mt-6">
+                        <button @click="closeAddEmployeeModal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                            Annuler
+                        </button>
+                        <button @click="saveEmployee" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                            {{ editMode ? 'Enregistrer les modifications' : 'Ajouter l\'employé' }}
+                        </button>
                     </div>
                 </div>
             </div>

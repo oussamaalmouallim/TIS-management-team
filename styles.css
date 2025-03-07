@@ -24,6 +24,19 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
 }
 
 .notification {
@@ -81,6 +94,16 @@
     align-items: center;
     justify-content: center;
     z-index: 100;
+    animation: fadeModal 0.3s ease-out;
+}
+
+@keyframes fadeModal {
+    from {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    to {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
 }
 
 .history-content {
@@ -90,6 +113,18 @@
     width: 600px;
     max-height: 80vh;
     overflow-y: auto;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .history-header {
@@ -166,7 +201,7 @@
 }
 
 /* History page specific styles */
-.employee-filter-badge {
+anness-filter-badge {
     transition: all 0.2s ease;
 }
 
@@ -186,6 +221,7 @@
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
+    transition: transform 0.3s ease-in-out;
 }
 
 .nav-item {
@@ -195,16 +231,22 @@
     color: #6b7280;
     text-decoration: none;
     font-size: 0.8rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .nav-item:hover, .nav-item.active {
     color: #4f46e5;
+    transform: translateY(-3px);
 }
 
 .nav-item i {
     font-size: 1.25rem;
     margin-bottom: 5px;
+    transition: transform 0.3s ease;
+}
+
+.nav-item:hover i, .nav-item.active i {
+    transform: scale(1.2);
 }
 
 @media (min-width: 768px) {
@@ -228,4 +270,191 @@
         width: 100%;
         overflow-x: auto;
     }
+}
+
+.photo-upload-container {
+    transition: all 0.3s ease;
+}
+
+.photo-upload-container:hover {
+    transform: scale(1.05);
+}
+
+input[type="file"] + label {
+    transition: all 0.3s ease;
+}
+
+input[type="file"] + label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input[type="file"] + label:active {
+    transform: translateY(0);
+}
+
+@keyframes pulse-border {
+    0% {
+        border-color: rgba(79, 70, 229, 0.6);
+    }
+    50% {
+        border-color: rgba(79, 70, 229, 1);
+    }
+    100% {
+        border-color: rgba(79, 70, 229, 0.6);
+    }
+}
+
+.photo-preview {
+    animation: pulse-border 2s infinite;
+}
+
+/* Page transitions */
+body {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.employee-card, .bg-white, .grid, .notification, .history-content {
+    animation: slideUp 0.5s ease-out;
+}
+
+/* Staggered loading animation for cards */
+.grid > div:nth-child(1) { animation-delay: 0.1s; }
+.grid > div:nth-child(2) { animation-delay: 0.2s; }
+.grid > div:nth-child(3) { animation-delay: 0.3s; }
+.grid > div:nth-child(4) { animation-delay: 0.4s; }
+.grid > div:nth-child(5) { animation-delay: 0.5s; }
+.grid > div:nth-child(6) { animation-delay: 0.6s; }
+.grid > div:nth-child(7) { animation-delay: 0.7s; }
+.grid > div:nth-child(8) { animation-delay: 0.8s; }
+
+/* Button and interactive element animations */
+button, select, .employee-filter-badge {
+    transition: all 0.2s ease;
+}
+
+button:hover, select:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:active, select:active {
+    transform: translateY(0);
+}
+
+/* Table row hover animation */
+tbody tr {
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+tbody tr:hover {
+    transform: translateX(5px);
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomOut {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.page-enter-active {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-leave {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-leave-to {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* Add new employee animation */
+.employee-form-container {
+    animation: slideUp 0.5s ease-out;
+}
+
+.employee-form input, .employee-form label {
+    transition: all 0.3s ease;
+}
+
+.employee-form input:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Adding a more visible edit button animation */
+.employee-card .view-history {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.employee-card:hover .view-history {
+    opacity: 1;
+}
+
+/* Animation for the add employee button */
+@keyframes pulse-btn {
+    0% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+    }
+}
+
+button.add-employee {
+    animation: pulse-btn 2s infinite;
 }

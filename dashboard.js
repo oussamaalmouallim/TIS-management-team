@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     counts.absent.push(employees.value.length - presentCount);
                 }
                 
-                // Create chart
+                // Create chart with animation
                 const ctx = document.getElementById('weeklyChart').getContext('2d');
                 new Chart(ctx, {
                     type: 'bar',
@@ -112,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     options: {
                         responsive: true,
+                        animation: {
+                            duration: 1500,
+                            easing: 'easeOutQuart'
+                        },
                         scales: {
                             x: {
                                 stacked: true,
@@ -154,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     .sort((a, b) => employeeHours[b] - employeeHours[a])
                     .slice(0, 5); // Top 5
                 
-                // Create chart
+                // Create chart with animation
                 const ctx = document.getElementById('employeeHoursChart').getContext('2d');
                 new Chart(ctx, {
                     type: 'horizontalBar',
@@ -171,6 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     options: {
                         indexAxis: 'y',
                         responsive: true,
+                        animation: {
+                            duration: 1500,
+                            easing: 'easeOutQuart'
+                        },
                         scales: {
                             x: {
                                 beginAtZero: true
